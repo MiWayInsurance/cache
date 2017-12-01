@@ -22,7 +22,7 @@ namespace Doctrine\Common\Cache;
 use Riak\Bucket;
 use Riak\Input;
 use Riak\Exception;
-use Riak\Object;
+use Riak\Object_;
 
 /**
  * Riak cache provider.
@@ -128,7 +128,7 @@ class RiakCache extends CacheProvider
     protected function doSave($id, $data, $lifeTime = 0)
     {
         try {
-            $object = new Object($id);
+            $object = new Object_($id);
 
             $object->setContent(serialize($data));
 
@@ -203,7 +203,7 @@ class RiakCache extends CacheProvider
      *
      * @return bool
      */
-    private function isExpired(Object $object) : bool
+    private function isExpired(Object_ $object) : bool
     {
         $metadataMap = $object->getMetadataMap();
 
@@ -239,7 +239,7 @@ class RiakCache extends CacheProvider
         $putInput = new Input\PutInput();
         $putInput->setVClock($vClock);
 
-        $mergedObject = new Object($id);
+        $mergedObject = new Object_($id);
         $mergedObject->setContent($winner->getContent());
 
         $this->bucket->put($mergedObject, $putInput);
